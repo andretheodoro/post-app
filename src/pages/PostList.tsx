@@ -61,6 +61,13 @@ const PostTitle = styled.h2`
   font-size: 1.5rem;
   color: #333333;
   margin-bottom: 0.5rem;
+  line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  height: 40px;
 `;
 
 const PostAuthor = styled.p`

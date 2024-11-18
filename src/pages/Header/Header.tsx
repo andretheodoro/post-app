@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { FaHome, FaList } from 'react-icons/fa';
+import { FaList, FaSignOutAlt } from 'react-icons/fa';
 
 const HeaderContainer = styled.header`
   position: fixed;
@@ -52,23 +52,33 @@ const IconButton = styled.button`
 const Header: React.FC = () => {
   const navigate = useNavigate();
 
-  const handleBackToLogin = () => {
-    navigate('/');
-  };
+  // const handleBackToLogin = () => {
+  //   navigate('/');
+  // };
 
   const handleGoToPostsList = () => {
     navigate('/posts');
+  };
+  
+  const handleLogout = () => {
+    // Remova o token ou outros dados do localStorage/sessionStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('idTeacher');
+    localStorage.removeItem('authToken');
+
+    // Redirecione para a página de login
+    navigate('/');
   };
 
   return (
     <HeaderContainer>
       <Title>Blogging FIAP</Title>
       <IconContainer>
-        <IconButton onClick={handleBackToLogin}>
-          <FaHome /> {/* Ícone de casa */}
-        </IconButton>
         <IconButton onClick={handleGoToPostsList}>
           <FaList /> {/* Ícone de lista */}
+        </IconButton>
+        <IconButton onClick={handleLogout}>
+          <FaSignOutAlt /> {/* Ícone de lista */}
         </IconButton>
       </IconContainer>
     </HeaderContainer>

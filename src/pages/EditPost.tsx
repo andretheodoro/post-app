@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '../api';
-import { BackButton } from '../styles/CommonStyled';
+import { ErrorNotification, NotificationContent, BackButton } from '../styles/CommonStyled';
 
 const Container = styled.div`
   display: flex;
@@ -75,6 +75,7 @@ const EditPost: React.FC = () => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [description, setDescription] = useState('');
+  const [error, setError] = useState('');
   const idteacher = localStorage.getItem('idTeacher');
   const navigate = useNavigate();
 
@@ -115,7 +116,24 @@ const EditPost: React.FC = () => {
         console.log('Post atualizado com sucesso');
         navigate('/teacherPostsList'); // Redireciona para a lista de posts do professor
       })
-      .catch(error => console.error('Erro ao atualizar o post:', error));
+      .catch((error) => {
+        if (error.response && error.response.data.errors) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const errorMessages = (() => {
+            const [firstError] = error.response.data.errors; 
+            const [field, message] = Object.entries(firstError)[0];
+            return `${field === "title" ? "Título" : field === "description" ? "Descrição" : "Autor"}: ${message}`;
+          })();
+          setError(errorMessages); // Define todas as mensagens de erro no estado
+        } else {
+          setError('Ocorreu um erro inesperado.');
+        }
+      });
+  };
+
+  // Função para remover a mensagem de erro
+  const handleErrorClick = () => {
+      setError(''); // Limpa a mensagem de erro ao clicar
   };
 
   return (
@@ -144,6 +162,12 @@ const EditPost: React.FC = () => {
         />
         <Button type="submit">Salvar Alterações</Button>
         <BackButton onClick={() => navigate(-1)}>Voltar</BackButton>
+        {
+            error &&     
+            <ErrorNotification>
+              <NotificationContent onClick={handleErrorClick}>{error}</NotificationContent>
+            </ErrorNotification>
+        }
       </Form>
     </Container>
   );
