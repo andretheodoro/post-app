@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '../api';
 import { ErrorNotification, NotificationContent, BackButton } from '../styles/CommonStyled';
+import { verifyExpirationAndRefreshToken } from './Auth/AuthContext';
+import { AxiosResponse } from 'axios';
 
 const Container = styled.div`
   display: flex;
@@ -82,7 +84,8 @@ const EditPost: React.FC = () => {
   // Carrega os dados do post existente
   useEffect(() => {
     api.get(`/posts/${id}`)
-      .then(response => {
+      .then((response: AxiosResponse) => {
+        verifyExpirationAndRefreshToken(response);
         const { title, author, description } = response.data;
         setTitle(title);
         setAuthor(author);
@@ -96,31 +99,31 @@ const EditPost: React.FC = () => {
     const token = localStorage.getItem('authToken'); // Pegando o token do localStorage
 
     if (!token) {
-        console.error('Token não encontrado. Usuário não autenticado.');
-        return;
+      console.error('Token não encontrado. Usuário não autenticado.');
+      return;
     }
 
     event.preventDefault();
     const updatedPost = { title, description, author, idteacher };
 
     api.put(
-        `/posts/${id}`, 
-        updatedPost, // Dados do post atualizado
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Enviando o token no header
-          },
-        }
-      )
-      .then(() => {
-        console.log('Post atualizado com sucesso');
+      `/posts/${id}`,
+      updatedPost, // Dados do post atualizado
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Enviando o token no header
+        },
+      }
+    )
+      .then((response: AxiosResponse) => {
+        verifyExpirationAndRefreshToken(response);
         navigate('/teacherPostsList'); // Redireciona para a lista de posts do professor
       })
       .catch((error) => {
         if (error.response && error.response.data.errors) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const errorMessages = (() => {
-            const [firstError] = error.response.data.errors; 
+            const [firstError] = error.response.data.errors;
             const [field, message] = Object.entries(firstError)[0];
             return `${field === "title" ? "Título" : field === "description" ? "Descrição" : "Autor"}: ${message}`;
           })();
@@ -133,7 +136,7 @@ const EditPost: React.FC = () => {
 
   // Função para remover a mensagem de erro
   const handleErrorClick = () => {
-      setError(''); // Limpa a mensagem de erro ao clicar
+    setError(''); // Limpa a mensagem de erro ao clicar
   };
 
   return (
@@ -163,10 +166,10 @@ const EditPost: React.FC = () => {
         <Button type="submit">Salvar Alterações</Button>
         <BackButton onClick={() => navigate(-1)}>Voltar</BackButton>
         {
-            error &&     
-            <ErrorNotification>
-              <NotificationContent onClick={handleErrorClick}>{error}</NotificationContent>
-            </ErrorNotification>
+          error &&
+          <ErrorNotification>
+            <NotificationContent onClick={handleErrorClick}>{error}</NotificationContent>
+          </ErrorNotification>
         }
       </Form>
     </Container>

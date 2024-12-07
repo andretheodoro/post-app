@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface AuthContextType {
@@ -11,14 +12,14 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Inicializa com o valor de token do localStorage
-  const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
+  const [token, setToken] = useState<string | null>(localStorage.getItem('authToken'));
 
   useEffect(() => {
     // Quando o token muda, sincronize com o localStorage
     if (token) {
-      localStorage.setItem('token', token);
+      localStorage.setItem('authToken', token);
     } else {
-      localStorage.removeItem('token');
+      localStorage.removeItem('authToken');
     }
   }, [token]);
 
@@ -31,7 +32,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Verifica se o usuário está autenticado com base na presença do token
-  const isAuthenticated = !!token;
+  const isAuthenticated = !!token; // TODO: Implementar lógica de verificação de expiração do token
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, token, login, logout }}>
@@ -46,4 +47,20 @@ export const useAuth = () => {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
+};
+
+export const verifyExpirationAndRefreshToken = (response: AxiosResponse) => {
+  console.clear();
+  try {
+    const newToken = response.headers['authorization']; // Captura o token do cabeçalho da resposta
+
+    if (newToken) {
+      console.log('Novo token recebido:', newToken);
+      localStorage.setItem('authToken', newToken); // Atualiza o token no localStorage
+    }
+  } catch (error) {
+    console.error('Erro ao verificar expiração do token:', error);
+  }
+
+
 };
