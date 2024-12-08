@@ -5,7 +5,7 @@ Este projeto Front-End é uma aplicação web responsiva desenvolvida em React p
 ## Repositório Github
 
 Repositório disponível em:
-https://github.com/andretheodoro/api-post-front
+https://github.com/andretheodoro/post-app
 
 ## Descrição
 
@@ -102,8 +102,8 @@ Siga os passos abaixo para configurar e executar o projeto:
 **1. Clone o repositório**
 
    ```bash
-   git clone https://github.com/andretheodoro/api-post-front.git
-   cd api-post-front
+   git clone https://github.com/andretheodoro/post-app.git
+   cd post-app
    ```
 
 **2. Instale as dependências**
