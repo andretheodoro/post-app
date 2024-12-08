@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api/api';
+import { AxiosResponse } from 'axios';
+import { verifyExpirationAndRefreshToken } from './Auth/AuthContext';
 
 const Container = styled.div`
   display: flex;
@@ -88,10 +90,10 @@ const ErrorMessage = styled.p`
 `;
 
 interface Post {
-    id: number;
-    title: string;
-    author: string;
-    description: string;
+  id: number;
+  title: string;
+  author: string;
+  description: string;
 }
 
 const PostDetails: React.FC = () => {
@@ -103,7 +105,8 @@ const PostDetails: React.FC = () => {
   useEffect(() => {
     if (id) {
       api.get(`/posts/${id}`)
-        .then((response) => {
+        .then((response: AxiosResponse) => {
+          verifyExpirationAndRefreshToken(response);
           setPost(response.data);
           setLoading(false);
         })

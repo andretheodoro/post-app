@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
 import { AxiosResponse } from 'axios';
+import { verifyExpirationAndRefreshToken } from './Auth/AuthContext';
 
 const Container = styled.div`
   display: flex;
@@ -149,15 +150,15 @@ const TeacherPostList: React.FC = () => {
   const [searchKeyword, setSearchKeyword] = useState('');
   const navigate = useNavigate();
 
-// Função para buscar posts por palavra-chave
-const searchPosts = async (keyword: string) => {
+  // Função para buscar posts por palavra-chave
+  const searchPosts = async (keyword: string) => {
     try {
       const response = await api.get(`/posts/search`, {
         params: { keyword }
       });
       setPosts(response.data); // Define os posts com base na resposta da API
     } catch (error) {
-      setPosts([]); 
+      setPosts([]);
       console.error('Erro ao buscar posts:', error);
     }
   };
@@ -165,8 +166,10 @@ const searchPosts = async (keyword: string) => {
   // Chama a função de busca quando a palavra-chave muda
   useEffect(() => {
     if (searchKeyword) {
+      console.log("pesquisa com filtro");
       searchPosts(searchKeyword);
     } else {
+      console.log("pesquisa sem filtro");
       // Caso a palavra-chave esteja vazia, carregue todos os posts
       loadAllPosts();
     }
@@ -174,28 +177,28 @@ const searchPosts = async (keyword: string) => {
 
   // Função para carregar todos os posts
   const loadAllPosts = async () => {
-        try {
-            const token = localStorage.getItem('authToken'); // Pegando o token do localStorage
+    try {
+      const token = localStorage.getItem('authToken'); // Pegando o token do localStorage
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            let response: AxiosResponse<any, any>;
-            if (token != null && token != "") {
-                const idTeacher = localStorage.getItem('idTeacher');
-                response = await api.get(`posts/professor/${idTeacher}`,  {
-                    headers: {
-                      Authorization: `Bearer ${token}`, // Enviando o token no header
-                    },
-                  });
-            }
-            else{
-                response = await api.get('/posts');
-            }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let response: AxiosResponse<any, any>;
+      if (token != null && token != "") {
+        const idTeacher = localStorage.getItem('idTeacher');
+        response = await api.get(`posts/professor/${idTeacher}`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Enviando o token no header
+          },
+        });
+      }
+      else {
+        response = await api.get('/posts');
+      }
 
-            setPosts(response.data);
-        } catch (error) {
-            console.error('Erro ao carregar posts:', error);
-        }
-    };
+      setPosts(response.data);
+    } catch (error) {
+      console.error('Erro ao carregar posts:', error);
+    }
+  };
 
 
   // Carrega todos os posts na primeira renderização
@@ -211,16 +214,17 @@ const searchPosts = async (keyword: string) => {
     const token = localStorage.getItem('authToken'); // Pegando o token do localStorage
 
     if (!token) {
-        console.error('Token não encontrado. Usuário não autenticado.');
-        return;
+      console.error('Token não encontrado. Usuário não autenticado.');
+      return;
     }
 
     api.delete(`/posts/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Enviando o token no header
-        }
-      })
-      .then(() => {
+      headers: {
+        Authorization: `Bearer ${token}`, // Enviando o token no header
+      }
+    })
+      .then((response: AxiosResponse) => {
+        verifyExpirationAndRefreshToken(response);
         setPosts(posts.filter(post => post.id !== id));
         console.log(`Post ${id} excluído com sucesso`);
       })

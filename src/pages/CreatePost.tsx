@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
 import { ErrorNotification, NotificationContent, BackButton } from '../styles/CommonStyled';
+import { AxiosResponse } from 'axios';
+import { verifyExpirationAndRefreshToken } from './Auth/AuthContext';
 
 const Container = styled.div`
   display: flex;
@@ -83,22 +85,23 @@ const CreatePost: React.FC = () => {
     const token = localStorage.getItem('authToken'); // Pegando o token do localStorage
 
     if (!token) {
-        setError('Token não encontrado. Usuário não autenticado.');
-        return;
+      setError('Token não encontrado. Usuário não autenticado.');
+      return;
     }
 
     event.preventDefault();
     const newPost = { title, description, author, idteacher };
 
-    api.post('/posts',        
-        newPost, // Dados do post 
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Enviando o token no header
-          },
-        }
-      )
-      .then(() => {
+    api.post('/posts',
+      newPost, // Dados do post 
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Enviando o token no header
+        },
+      }
+    )
+      .then((response: AxiosResponse) => {
+        verifyExpirationAndRefreshToken(response);
         console.log('Post criado com sucesso');
         navigate('/teacherPostsList'); // Redireciona para a lista de posts do professor após a criação
       })
@@ -106,7 +109,7 @@ const CreatePost: React.FC = () => {
         if (error.response && error.response.data.errors) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const errorMessages = (() => {
-            const [firstError] = error.response.data.errors; 
+            const [firstError] = error.response.data.errors;
             const [field, message] = Object.entries(firstError)[0];
             return `${field === "title" ? "Título" : field === "description" ? "Descrição" : "Autor"}: ${message}`;
           })();
@@ -117,10 +120,10 @@ const CreatePost: React.FC = () => {
       });
   };
 
-    // Função para remover a mensagem de erro
-    const handleErrorClick = () => {
-        setError(''); // Limpa a mensagem de erro ao clicar
-    };
+  // Função para remover a mensagem de erro
+  const handleErrorClick = () => {
+    setError(''); // Limpa a mensagem de erro ao clicar
+  };
 
   return (
     <Container>
@@ -149,10 +152,10 @@ const CreatePost: React.FC = () => {
         <Button type="submit">Criar Post</Button>
         <BackButton onClick={() => navigate(-1)}>Voltar</BackButton>
         {
-            error &&     
-            <ErrorNotification>
-              <NotificationContent onClick={handleErrorClick}>{error}</NotificationContent>
-            </ErrorNotification>
+          error &&
+          <ErrorNotification>
+            <NotificationContent onClick={handleErrorClick}>{error}</NotificationContent>
+          </ErrorNotification>
         }
       </Form>
     </Container>
