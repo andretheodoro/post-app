@@ -181,7 +181,7 @@ Alunos podem visualizar posts listados com detalhes, basta clicar sobre o card d
 **4. Busca Posts por Palavra-Chave**
 
 Alunos e Professores podem filtrar/buscar Posts de acordo com Palavras-Chaves desejadas. A busca será realizada através do título ou conteúdo.
-Para caso de Alunos serão filtrados todos os Posts do Banco de Dados, para caso dos Professores serão filtrados apenas os Posts que pertencem ao mesmo.
+Para caso de Alunos serão filtrados todos os Posts do Banco de Dados, para caso dos Professores serão filtrados apenas os Posts que pertencem ao professor logado.
 
 ![image](https://github.com/user-attachments/assets/61b082ea-9273-40cc-a3e5-f54726fd5aae)
 
