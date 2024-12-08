@@ -156,7 +156,17 @@ const TeacherPostList: React.FC = () => {
       const response = await api.get(`/posts/search`, {
         params: { keyword }
       });
-      setPosts(response.data); // Define os posts com base na resposta da API
+      
+      
+    // Recupera o ID do professor do localStorage
+    const idTeacher = Number(localStorage.getItem('idTeacher'));
+    
+    // Filtra os posts retornados para incluir apenas os que pertencem ao professor logado
+    const filteredPosts = response.data.filter(
+      (post: { idteacher: number }) => post.idteacher === idTeacher
+    );
+
+      setPosts(filteredPosts); // Define os posts com base na resposta da API
     } catch (error) {
       setPosts([]);
       console.error('Erro ao buscar posts:', error);
