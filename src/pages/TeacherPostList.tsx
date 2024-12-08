@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import api from '../api';
+import api from '../api/api';
 import { AxiosResponse } from 'axios';
 
 const Container = styled.div`
@@ -236,7 +236,7 @@ const searchPosts = async (keyword: string) => {
       <Title>Gerenciar Posts</Title>
       <SearchInput
         type="text"
-        placeholder="Buscar por título..."
+        placeholder="Buscar por título ou conteúdo..."
         value={searchKeyword}
         onChange={(e) => setSearchKeyword(e.target.value)}
       />

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import api from '../api';
+import api from '../api/api';
 import { ErrorNotification, NotificationContent, BackButton } from '../styles/CommonStyled';
 
 const Container = styled.div`
