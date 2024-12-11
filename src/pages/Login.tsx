@@ -116,6 +116,7 @@ const Login: React.FC = () => {
         const idTeacher = response.data.idTeacher;
         localStorage.setItem('authToken', token);
         localStorage.setItem('idTeacher', idTeacher);
+        console.log("Token Login: ", token);
         login(token);
         navigate('/teacherPostsList');
       } else {
@@ -127,10 +128,10 @@ const Login: React.FC = () => {
     }
   };
 
-    // Função para remover a mensagem de erro
-    const handleErrorClick = () => {
-        setError(''); // Limpa a mensagem de erro ao clicar
-    };
+  // Função para remover a mensagem de erro
+  const handleErrorClick = () => {
+    setError(''); // Limpa a mensagem de erro ao clicar
+  };
 
   return (
     <Container>
@@ -172,10 +173,10 @@ const Login: React.FC = () => {
           </Button>
         </Form>
         {
-            error &&     
-            <ErrorNotification>
-              <NotificationContent onClick={handleErrorClick}>{error}</NotificationContent>
-            </ErrorNotification>
+          error &&
+          <ErrorNotification>
+            <NotificationContent onClick={handleErrorClick}>{error}</NotificationContent>
+          </ErrorNotification>
         }
       </FormWrapper>
     </Container>
