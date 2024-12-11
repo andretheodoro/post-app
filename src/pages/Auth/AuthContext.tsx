@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import api from '../../api'; // Supondo que você tenha uma instância do axios configurada
+import api from '../../api/api';
 
 interface AuthContextType {
   isAuthenticated: boolean;
