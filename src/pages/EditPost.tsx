@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
-import api from '../api';
+import api from '../api/api';
 import { ErrorNotification, NotificationContent, BackButton } from '../styles/CommonStyled';
 import { verifyExpirationAndRefreshToken } from './Auth/AuthContext';
 import { AxiosResponse } from 'axios';

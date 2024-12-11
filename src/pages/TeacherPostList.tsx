@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import api from '../api';
+import api from '../api/api';
 import { AxiosResponse } from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import store, { RootState } from '../reducers/post/postStore';
@@ -161,7 +161,15 @@ const TeacherPostList: React.FC = () => {
     try {
       dispatch(setLoading(true));
       const response = await api.get(`/posts/search`, { params: { keyword } });
-      dispatch(setPosts(response.data));
+      // Recupera o ID do professor do localStorage
+      const idTeacher = Number(localStorage.getItem('idTeacher'));
+
+      // Filtra os posts retornados para incluir apenas os que pertencem ao professor logado
+      const filteredPosts = response.data.filter(
+        (post: { idteacher: number }) => post.idteacher === idTeacher
+      );
+
+      dispatch(setPosts(filteredPosts));
     } catch (error) {
       console.log('Erro ao buscar posts.', error);
       dispatch(setError('Erro ao buscar posts.'));
@@ -232,7 +240,7 @@ const TeacherPostList: React.FC = () => {
       <Title>Gerenciar Posts</Title>
       <SearchInput
         type="text"
-        placeholder="Buscar por título..."
+        placeholder="Buscar por título ou conteúdo..."
         value={searchKeyword}
         onChange={(e) => dispatch(setSearchKeyword(e.target.value))}
       />
