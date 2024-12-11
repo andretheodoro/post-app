@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import { AxiosResponse } from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import store, { RootState } from '../reducers/post/postStore';
+import { setPosts, setSearchKeyword, setLoading, setError, deletePost } from '../reducers/post/postActions';
 import { verifyExpirationAndRefreshToken } from './Auth/AuthContext';
+import { IPost } from '../types/types';
 
 const Container = styled.div`
   display: flex;
@@ -138,97 +142,85 @@ const DeleteButton = styled.button`
   }
 `;
 
-interface Post {
-  id: number;
-  title: string;
-  author: string;
-  description: string;
-}
+// interface Post {
+//   id: number;
+//   title: string;
+//   author: string;
+//   description: string;
+// }
 
 const TeacherPostList: React.FC = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [searchKeyword, setSearchKeyword] = useState('');
+  const dispatch = useDispatch<typeof store.dispatch>();
   const navigate = useNavigate();
+  // const { posts, searchKeyword, loading, error } = useSelector((state: RootState) => state);
+  const { posts, searchKeyword, loading, error } = useSelector((state: RootState) => state.posts);
+
 
   // Função para buscar posts por palavra-chave
   const searchPosts = async (keyword: string) => {
     try {
-      const response = await api.get(`/posts/search`, {
-        params: { keyword }
-      });
-      setPosts(response.data); // Define os posts com base na resposta da API
+      dispatch(setLoading(true));
+      const response = await api.get(`/posts/search`, { params: { keyword } });
+      dispatch(setPosts(response.data));
     } catch (error) {
-      setPosts([]);
-      console.error('Erro ao buscar posts:', error);
+      console.log('Erro ao buscar posts.', error);
+      dispatch(setError('Erro ao buscar posts.'));
+    } finally {
+      dispatch(setLoading(false));
     }
   };
-
-  // Chama a função de busca quando a palavra-chave muda
-  useEffect(() => {
-    if (searchKeyword) {
-      console.log("pesquisa com filtro");
-      searchPosts(searchKeyword);
-    } else {
-      console.log("pesquisa sem filtro");
-      // Caso a palavra-chave esteja vazia, carregue todos os posts
-      loadAllPosts();
-    }
-  }, [searchKeyword]);
 
   // Função para carregar todos os posts
   const loadAllPosts = async () => {
     try {
-      const token = localStorage.getItem('authToken'); // Pegando o token do localStorage
+      const token = localStorage.getItem('authToken');
+      let response: AxiosResponse;
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let response: AxiosResponse<any, any>;
-      if (token != null && token != "") {
+      if (token) {
         const idTeacher = localStorage.getItem('idTeacher');
         response = await api.get(`posts/professor/${idTeacher}`, {
-          headers: {
-            Authorization: `Bearer ${token}`, // Enviando o token no header
-          },
+          headers: { Authorization: `Bearer ${token}` }
         });
-      }
-      else {
+      } else {
         response = await api.get('/posts');
       }
 
-      setPosts(response.data);
+      dispatch(setPosts(response.data));
     } catch (error) {
-      console.error('Erro ao carregar posts:', error);
+      console.log('Erro ao carregar posts.', error);
+      dispatch(setError('Erro ao carregar posts.'));
     }
   };
 
-
-  // Carrega todos os posts na primeira renderização
   useEffect(() => {
-    loadAllPosts();
-  }, []);
+    if (searchKeyword) {
+      searchPosts(searchKeyword);
+    } else {
+      loadAllPosts();
+    }
+  }, [searchKeyword]);
 
   const handleEdit = (id: number) => {
     navigate(`/editPost/${id}`);
   };
 
-  const handleDelete = (id: number) => {
-    const token = localStorage.getItem('authToken'); // Pegando o token do localStorage
-
+  const handleDelete = async (id: number) => {
+    const token = localStorage.getItem('authToken');
     if (!token) {
-      console.error('Token não encontrado. Usuário não autenticado.');
+      console.error('Token não encontrado.');
       return;
     }
 
-    api.delete(`/posts/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`, // Enviando o token no header
-      }
-    })
-      .then((response: AxiosResponse) => {
-        verifyExpirationAndRefreshToken(response);
-        setPosts(posts.filter(post => post.id !== id));
-        console.log(`Post ${id} excluído com sucesso`);
-      })
-      .catch((error) => console.error('Erro ao excluir o post:', error));
+    try {
+      const response = await api.delete(`/posts/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      verifyExpirationAndRefreshToken(response);
+      dispatch(deletePost(id));
+    } catch (error) {
+      console.error('Erro ao excluir o post:', error);
+    }
   };
 
   const handleCreateNewPost = () => {
@@ -242,22 +234,27 @@ const TeacherPostList: React.FC = () => {
         type="text"
         placeholder="Buscar por título..."
         value={searchKeyword}
-        onChange={(e) => setSearchKeyword(e.target.value)}
+        onChange={(e) => dispatch(setSearchKeyword(e.target.value))}
       />
       <CreateButton onClick={handleCreateNewPost}>Criar Novo Post</CreateButton>
-      <CardGrid>
-        {posts.map((post) => (
-          <PostCard key={post.id}>
-            <PostTitle>{post.title}</PostTitle>
-            <PostAuthor>Autor: {post.author}</PostAuthor>
-            <PostDescription>{post.description}</PostDescription>
-            <ButtonGroup>
-              <EditButton onClick={() => handleEdit(post.id)}>Editar</EditButton>
-              <DeleteButton onClick={() => handleDelete(post.id)}>Excluir</DeleteButton>
-            </ButtonGroup>
-          </PostCard>
-        ))}
-      </CardGrid>
+      {loading && <div>🔄 Carregando...</div>}{/* Exibe mensagem enquanto carrega */}
+      {error && <div style={{ color: 'red' }}>{error}</div>}  {/* Exibe mensagem de erro */}
+
+      {!loading && !error && (
+        <CardGrid>
+          {posts.map((post: IPost) => (
+            <PostCard key={post.id}>
+              <PostTitle>{post.title}</PostTitle>
+              <PostAuthor>Autor: {post.author}</PostAuthor>
+              <PostDescription>{post.description}</PostDescription>
+              <ButtonGroup>
+                <EditButton onClick={() => handleEdit(post.id as number)}>Editar</EditButton>
+                <DeleteButton onClick={() => handleDelete(post.id as number)}>Excluir</DeleteButton>
+              </ButtonGroup>
+            </PostCard>
+          ))}
+        </CardGrid>
+      )}
     </Container>
   );
 };

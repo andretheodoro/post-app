@@ -95,28 +95,28 @@ interface Post {
 }
 
 const PostList: React.FC = () => {
-    const [posts, setPosts] = useState<Post[]>([]);
-    const [searchKeyword, setSearchKeyword] = useState('');
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [searchKeyword, setSearchKeyword] = useState('');
   const navigate = useNavigate();
 
   const handleCardClick = (id: number) => {
     navigate(`/post/${id}`);
   };
 
-    // Função para buscar posts por palavra-chave
-    const searchPosts = async (keyword: string) => {
-        try {
-          const response = await api.get(`/posts/search`, {
-            params: { keyword }
-          });
-          setPosts(response.data); // Define os posts com base na resposta da API
-        } catch (error) {
-          setPosts([]); 
-          console.error('Erro ao buscar posts:', error);
-        }
-    };
+  // Função para buscar posts por palavra-chave
+  const searchPosts = async (keyword: string) => {
+    try {
+      const response = await api.get(`/posts/search`, {
+        params: { keyword }
+      });
+      setPosts(response.data); // Define os posts com base na resposta da API
+    } catch (error) {
+      setPosts([]);
+      console.error('Erro ao buscar posts:', error);
+    }
+  };
 
-      // Chama a função de busca quando a palavra-chave muda
+  // Chama a função de busca quando a palavra-chave muda
   useEffect(() => {
     if (searchKeyword) {
       searchPosts(searchKeyword);
@@ -126,35 +126,35 @@ const PostList: React.FC = () => {
     }
   }, [searchKeyword]);
 
-    // Função para carregar todos os posts
-    const loadAllPosts = async () => {
-        try {
-            const token = localStorage.getItem('authToken'); // Pegando o token do localStorage
+  // Função para carregar todos os posts
+  const loadAllPosts = async () => {
+    try {
+      const token = localStorage.getItem('authToken'); // Pegando o token do localStorage
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            let response: AxiosResponse<any, any>;
-            if (token != null && token != "") {
-                const idTeacher = localStorage.getItem('idTeacher');
-                response = await api.get(`posts/professor/${idTeacher}`,  {
-                    headers: {
-                      Authorization: `Bearer ${token}`, // Enviando o token no header
-                    },
-                  });
-            }
-            else{
-                response = await api.get('/posts');
-            }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let response: AxiosResponse<any, any>;
+      if (token != null && token != "") {
+        const idTeacher = localStorage.getItem('idTeacher');
+        response = await api.get(`posts/professor/${idTeacher}`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Enviando o token no header
+          },
+        });
+      }
+      else {
+        response = await api.get('/posts');
+      }
 
-            setPosts(response.data);
-        } catch (error) {
-            console.error('Erro ao carregar posts:', error);
-        }
-    };
+      setPosts(response.data);
+    } catch (error) {
+      console.error('Erro ao carregar posts:', error);
+    }
+  };
 
-    // Carrega todos os posts na primeira renderização
-    useEffect(() => {
-        loadAllPosts();
-    }, []);
+  // Carrega todos os posts na primeira renderização
+  useEffect(() => {
+    loadAllPosts();
+  }, []);
 
 
   return (

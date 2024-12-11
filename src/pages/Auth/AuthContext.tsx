@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import api from '../../api'; // Supondo que você tenha uma instância do axios configurada
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -11,31 +12,58 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Inicializa com o valor de token do localStorage
   const [token, setToken] = useState<string | null>(localStorage.getItem('authToken'));
+  const [authenticated, setAuthenticated] = useState<boolean>(false); // Estado de autenticação
 
+  // Quando o token mudar, faça a verificação de sua validade
   useEffect(() => {
-    // Quando o token muda, sincronize com o localStorage
     if (token) {
-      localStorage.setItem('authToken', token);
+      // Verifique a validade do token
+      checkIsAuthenticated(token);
     } else {
-      localStorage.removeItem('authToken');
+      setAuthenticated(false);
     }
   }, [token]);
 
   const login = (token: string) => {
-    setToken(token); // Armazena o token no estado e localStorage
+    setToken(token);
+    localStorage.setItem('authToken', token);
   };
 
   const logout = () => {
-    setToken(null); // Remove o token do estado e localStorage
+    setToken(null);
+    setAuthenticated(false);
+    localStorage.removeItem('authToken');
   };
 
-  // Verifica se o usuário está autenticado com base na presença do token
-  const isAuthenticated = !!token; // TODO: Implementar lógica de verificação de expiração do token
+  // Função para verificar se o token JWT é válido
+  const checkIsAuthenticated = async (token: string) => {
+    try {
+      // const response = await api.get(`/auth/verifyToken`, {
+      //   headers: {
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      // });
+
+      const response = await api.get(`/professor/isAuthenticated`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status >= 200 && response.status < 300) {
+        setAuthenticated(true); // Se a API responder com sucesso, o token é válido
+      } else {
+        setAuthenticated(false); // Caso contrário, invalidamos o estado
+      }
+    } catch (error) {
+      console.error('Erro ao verificar o token:', error);
+      setAuthenticated(false); // Em caso de erro na verificação, considera-se o token inválido
+    }
+  };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, token, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated: authenticated, token, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
@@ -49,18 +77,19 @@ export const useAuth = () => {
   return context;
 };
 
+// Função para verificar expiração do token e atualizá-lo
 export const verifyExpirationAndRefreshToken = (response: AxiosResponse) => {
-  console.clear();
+  // console.clear();
   try {
     const newToken = response.headers['authorization']; // Captura o token do cabeçalho da resposta
+    console.log('newtoken:', newToken);
 
     if (newToken) {
       console.log('Novo token recebido:', newToken);
       localStorage.setItem('authToken', newToken); // Atualiza o token no localStorage
     }
+
   } catch (error) {
     console.error('Erro ao verificar expiração do token:', error);
   }
-
-
 };

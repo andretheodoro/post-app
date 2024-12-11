@@ -34,7 +34,7 @@ const Input = styled.input`
   font-size: 1rem;
   border: 1px solid #cccccc;
   border-radius: 5px;
-  color: #333333;
+  color: light dark;
 
   &:focus {
     outline: none;
@@ -48,7 +48,7 @@ const Textarea = styled.textarea`
   font-size: 1rem;
   border: 1px solid #cccccc;
   border-radius: 5px;
-  color: #333333;
+  color: light dark;
   resize: vertical;
   min-height: 150px;
 
