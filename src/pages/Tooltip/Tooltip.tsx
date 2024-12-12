@@ -79,7 +79,7 @@ const TooltipWithHighlight: React.FC<TooltipWithHighlightProps> = ({
                 onMouseEnter={() => handleMouseEnter(note)}
                 onMouseLeave={handleMouseLeave}
             >
-                {text.slice(note.start, note.end)}
+                {text.slice(note.start, note.end).replace(' ', '\u00A0')}
                 {visible && activeNote?.id === note.id && (
                     <div
                         style={{
