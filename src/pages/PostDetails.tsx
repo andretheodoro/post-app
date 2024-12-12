@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api/api';
 import { AxiosResponse } from 'axios';
 import { verifyExpirationAndRefreshToken } from './Auth/AuthContext';
+import ButtonNoteComponent from './Note/Note';
+import TooltipWithHighlight from './Tooltip/Tooltip';
 
 const Container = styled.div`
   display: flex;
@@ -96,11 +98,22 @@ interface Post {
   description: string;
 }
 
+interface Note {
+  id: number;
+  postId: number;
+  start: number;
+  end: number;
+  text: string;
+  textPost: string;
+}
+
+
 const PostDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
+  const [notes, setNotes] = useState<Note[]>([]);
 
   useEffect(() => {
     if (id) {
@@ -114,8 +127,27 @@ const PostDetails: React.FC = () => {
           console.error('Erro ao buscar detalhes do post:', error);
           setLoading(false);
         });
+
+      // Carregar as notas
+      api.get(`/posts/${id}/notes`)
+        .then((response: AxiosResponse) => {
+          setNotes(response.data);
+        })
+        .catch((error) => {
+          console.error('Erro ao buscar notas:', error);
+        });
     }
   }, [id]);
+  const refreshNotes = () => {
+    // Carregar as notas
+    api.get(`/posts/${id}/notes`)
+      .then((response: AxiosResponse) => {
+        setNotes(response.data);
+      })
+      .catch((error) => {
+        console.error('Erro ao buscar notas:', error);
+      });
+  };
 
   if (loading) return <LoadingMessage>Carregando...</LoadingMessage>;
 
@@ -126,10 +158,13 @@ const PostDetails: React.FC = () => {
       <PostWrapper>
         <Title>{post.title}</Title>
         <Author>Escrito por: <span>{post.author}</span></Author>
-        <Content>{post.description}</Content>
+        <Content >
+          <ButtonNoteComponent idPost={post.id} textPost={post.description} refreshNote={refreshNotes}></ButtonNoteComponent>
+          <TooltipWithHighlight text={post.description} notes={notes} position='top' />
+        </Content>
         <BackButton onClick={() => navigate(-1)}>Voltar</BackButton>
       </PostWrapper>
-    </Container>
+    </Container >
   );
 };
 

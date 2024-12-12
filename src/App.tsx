@@ -37,7 +37,7 @@ const App: React.FC = () => {
           }
         />
 
-      <Route
+        <Route
           path="/editPost/:id"
           element={
             <ProtectedRoute>
