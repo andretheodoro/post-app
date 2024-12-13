@@ -277,7 +277,7 @@ A nota/comentário será adicionado no trecho informado:
 
 ![image](https://github.com/user-attachments/assets/cb31c6dd-dc01-4841-96a6-f1b0d9cf9b10)
 
-**6. Cabeçalho**
+**6. Cabeçalho (Header)**
 
 Todas as páginas possuem o cabeçalho com dois ícones, o primeiro ícone, ao clicar será redirecionado para a lista de posts.
 Caso esteja logado como professor, será aberto a página de Gerencimanento de Posts, caso esteja como aluno, será posicionado na página de Lista de Posts.
@@ -287,6 +287,18 @@ Caso esteja logado como professor, será aberto a página de Gerencimanento de P
 O segundo ícone, desloga o professor e redireciona o usuário para a tela inicial.
 
 ![image](https://github.com/user-attachments/assets/36fcdef2-dc31-44ce-9085-bfef2ce81dbb)
+
+## Aplicação Responsiva
+
+Através da utilização de Styled-Components e outras técnicas foi desenvolvida uma aplicação responsiva, conforme segue nas imagens abaixo:
+
+![image](https://github.com/user-attachments/assets/5ec5602a-d90d-4f01-92a8-45a3d32bb57a)
+![image](https://github.com/user-attachments/assets/5e744a0a-1861-49d5-9bb8-d0701c218995)
+![image](https://github.com/user-attachments/assets/96d46017-80ba-4061-b0b2-29354e7e66ec)
+![image](https://github.com/user-attachments/assets/e0dd1614-29fd-42c6-af8a-bed0d0a360d5)
+![image](https://github.com/user-attachments/assets/12c195e8-edcb-4b9c-bb65-3d0905989a77)
+![image](https://github.com/user-attachments/assets/37117f63-9d57-480d-ba62-15be1fab6609)
+![image](https://github.com/user-attachments/assets/007d3f5d-13f7-4896-8511-52a019ab5669)
 
 ## Desafios Enfrentados pela Equipe Durante o Desenvolvimento
 
@@ -301,3 +313,11 @@ Solução: Utilizamos styled-components com media queries para criar estilos res
 
 Desafio: Lidar com respostas assíncronas da API e exibir mensagens de erro amigáveis ao usuário.
 Solução: Utilizamos a biblioteca Axios para consumir a API e implementamos mecanismos de feedback visual para erros, como notificações e validações.
+
+## Melhorias futuras
+
+A fim de aprimorar e evoluir o produto, elencamos algumas futuras melhorias que serão realizadas no projeto:
+
+- Separar notas por usuário x posts.
+- Ajustar identificação de notas para não permitir "colisão".
+- Permitir comentários gerais nos posts.
