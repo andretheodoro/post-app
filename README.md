@@ -115,18 +115,48 @@ Essas ações são usadas para modificar o estado global gerenciado pelo Redux.
 - **Imutabilidade:** Cada atualização cria um novo estado, garantindo consistência.
 - **Escalabilidade:** Fica fácil adicionar novos tipos de ações ou alterar a lógica.
 
-## Token
+## Token / Rotas Protegidas
 
 Implementado no projeto validação de token por tempo pré definido (10 minutos).
 A checagem do tempo de inatividade será realizada de forma contínua para cada nova interação do professor e renovando o token se necessário.
 
 Caso o tempo de inatividade seja superior ao definido o professor será deslogado e redirecionado a tela de login.
 
+Além disso, para as seguintes rotas de uso exclusivo do professor foi implementado a utilização de rotas protegidas (ProtectedRoute - verificação de login/token ativo):
+
+- TeacherPostList (Administração de Postagens)
+- CreatePost (Criação de Postagens)
+- EditPost (Edição de Postagens)
+
+Ao acessar essas páginas e caso acesso não esteja válido, aplicação redirecionará o usuário automaticamente para a tela de login.
+
 ## Styled-Components
 
 O Styled-Components é uma biblioteca poderosa para estilização em React, que permite definir estilos diretamente no JavaScript. Essa abordagem encapsula os estilos em cada componente, evitando conflitos globais e promovendo uma manutenção mais simples e eficiente, além de facilitar a reutilização de código.
 
 No projeto de posts, o Styled-Components foi aplicado para criar uma interface bem estruturada e modular. Cada componente foi estilizado de forma isolada, garantindo que os estilos permanecessem organizados e livres de interferências externas. Além disso, a possibilidade de personalizar estilos com base em propriedades trouxe uma flexibilidade significativa, permitindo a criação de componentes dinâmicos e adaptáveis às necessidades da aplicação.
+
+## Axios
+
+No projeto, o Axios foi utilizado para realizar requisições HTTP de forma simples e eficiente, integrando o front-end React com o back-end da aplicação. Ele foi configurado para enviar dados e obter informações dos endpoints da API, garantindo que a comunicação entre o cliente e o servidor fosse feita de forma segura e estruturada.
+
+- **Requisições de Login:**
+
+O Axios foi usado para enviar as credenciais do usuário para o endpoint de login do servidor.
+Dependendo da resposta, o token de autenticação é armazenado no localStorage para futuras requisições autenticadas.
+
+- **Envio de Dados:**
+
+O Axios foi utilizado para enviar dados de formulários, como no caso da criação e atualização de posts, através de requisições POST/PUT/DELETE.
+Tratamento de Erros:
+
+Respostas de erro, como falhas de autenticação ou dados inválidos, eram tratadas com um bloco try/catch, exibindo mensagens de erro apropriadas para o usuário.
+
+- **Configuração Global:**
+
+Foi configurado um arquivo central (api.ts) para instanciar e exportar o Axios, facilitando a reutilização das configurações e tornando o código mais organizado.
+
+Esse uso do Axios proporcionou uma comunicação eficaz e simplificada com o servidor, com fácil tratamento de erros e suporte a requisições assíncronas.
 
 ## Estrutura Geral do Projeto
 
@@ -280,7 +310,7 @@ A nota/comentário será adicionado no trecho informado:
 **6. Cabeçalho (Header)**
 
 Todas as páginas possuem o cabeçalho com dois ícones, o primeiro ícone, ao clicar será redirecionado para a lista de posts.
-Caso esteja logado como professor, será aberto a página de Gerencimanento de Posts, caso esteja como aluno, será posicionado na página de Lista de Posts.
+Caso esteja logado como professor, será aberto a página de Gerenciamento de Posts, caso esteja como aluno, será posicionado na página de Lista de Posts.
 
 ![image](https://github.com/user-attachments/assets/42b9256d-4e93-49da-b7d9-724c0e2c9058)
 
@@ -307,11 +337,13 @@ O desenvolvimento deste projeto apresentou diversos desafios técnicos e organiz
 **1. Responsividade e Design para Dispositivos Móveis**
 
 Desafio: Ajustar o layout da aplicação para proporcionar uma boa experiência em telas pequenas.
+
 Solução: Utilizamos styled-components com media queries para criar estilos responsivos, ajustando margens, paddings, fontes e outros elementos visuais.
 
 **2. Integração com a API de Posts**
 
 Desafio: Lidar com respostas assíncronas da API e exibir mensagens de erro amigáveis ao usuário.
+
 Solução: Utilizamos a biblioteca Axios para consumir a API e implementamos mecanismos de feedback visual para erros, como notificações e validações.
 
 ## Melhorias futuras
