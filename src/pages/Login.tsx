@@ -10,9 +10,16 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: 100vh;  /* Garante que o container ocupe 100% da altura da tela */
   background-color: #f0f2f5;
   padding: 1rem;
+  box-sizing: border-box; /* Garante que o padding não altere a altura total do container */
+
+  /* Ajustes para dispositivos móveis */
+  @media (max-width: 768px) {
+    height: 100vh;  /* Garantir que a altura seja 100% da altura da tela no mobile */
+    padding: 1rem;  /* Manter o padding para não alterar o layout */
+  }
 `;
 
 const FormWrapper = styled.div`
@@ -22,6 +29,9 @@ const FormWrapper = styled.div`
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   @media (min-width: 768px) {
     padding: 3rem;

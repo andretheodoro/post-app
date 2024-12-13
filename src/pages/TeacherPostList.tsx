@@ -159,6 +159,7 @@ const TeacherPostList: React.FC = () => {
   // Função para buscar posts por palavra-chave
   const searchPosts = async (keyword: string) => {
     try {
+      dispatch(setError(''));
       dispatch(setLoading(true));
       const response = await api.get(`/posts/search`, { params: { keyword } });
       // Recupera o ID do professor do localStorage
@@ -172,7 +173,7 @@ const TeacherPostList: React.FC = () => {
       dispatch(setPosts(filteredPosts));
     } catch (error) {
       console.log('Erro ao buscar posts.', error);
-      dispatch(setError('Erro ao buscar posts.'));
+      dispatch(setError(error.response.data.message));
     } finally {
       dispatch(setLoading(false));
     }
@@ -180,6 +181,8 @@ const TeacherPostList: React.FC = () => {
 
   // Função para carregar todos os posts
   const loadAllPosts = async () => {
+    dispatch(setError(''));
+
     try {
       const token = localStorage.getItem('authToken');
       let response: AxiosResponse;

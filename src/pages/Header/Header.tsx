@@ -57,7 +57,15 @@ const Header: React.FC = () => {
   // };
 
   const handleGoToPostsList = () => {
-    navigate('/posts');
+    const idteacher = Number(localStorage.getItem('idTeacher'));
+
+    if (idteacher > 0){
+      navigate('/teacherPostsList');
+    }
+    else{
+      navigate('/posts');
+    }
+
   };
   
   const handleLogout = () => {

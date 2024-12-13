@@ -7,6 +7,7 @@ interface AuthContextType {
   token: string | null;
   login: (token: string) => void;
   logout: () => void;
+  loading: boolean; // Adiciona a propriedade 'loading'
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -14,19 +15,22 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(localStorage.getItem('authToken'));
   const [authenticated, setAuthenticated] = useState<boolean>(false); // Estado de autenticação
+  const [loading, setLoading] = useState<boolean>(true); // Novo estado de carregamento
 
-  // Quando o token mudar, faça a verificação de sua validade
   useEffect(() => {
-    if (token) {
-      // Verifique a validade do token
-      checkIsAuthenticated(token);
-    } else {
-      setAuthenticated(false);
-    }
+    const verifyToken = async () => {
+      if (token) {
+        await checkIsAuthenticated(token);
+      }
+      setLoading(false); // Após verificar, desativa o estado de carregamento
+    };
+
+    verifyToken();
   }, [token]);
 
   const login = (token: string) => {
     setToken(token);
+    setAuthenticated(true);
     localStorage.setItem('authToken', token);
   };
 
@@ -36,15 +40,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem('authToken');
   };
 
-  // Função para verificar se o token JWT é válido
   const checkIsAuthenticated = async (token: string) => {
     try {
-      // const response = await api.get(`/auth/verifyToken`, {
-      //   headers: {
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      // });
-
       const response = await api.get(`/professor/isAuthenticated`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -63,7 +60,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated: authenticated, token, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated: authenticated, token, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

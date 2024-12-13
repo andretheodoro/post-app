@@ -1,8 +1,16 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  height: 100%; /* Garante que o root ocupe a altura total */
+  display: flex;
 }
 
 .logo {
