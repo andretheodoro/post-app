@@ -13,7 +13,7 @@ Após o sucesso do desenvolvimento da aplicação de blogging dinâmico utilizan
 
 ## Objetivo
 
-Desenvolver uma interface gráfica para a aplicação de blogging utilizando React. A aplicação desenvolvida é responsiva, acessível e fácil de usar, permitindo aos docentes e alunos(as) interagir com os diversos endpoints REST já implementados no back-end.
+Desenvolver uma interface gráfica para a aplicação de blogging utilizando React. A aplicação deve ser responsiva, acessível e fácil de usar, permitindo aos docentes e alunos(as) interagir com os diversos endpoints REST já implementados no back-end.
 
 ## Arquitetura da Aplicação
 
@@ -51,7 +51,7 @@ A estilização utiliza styled-components, permitindo que estilos sejam definido
 
 **7. Comunicação com a API**
 
-A interação com o back-end é centralizada no arquivo api/index.ts, utilizando o Axios para chamadas HTTP. Todas as requisições passam por esse ponto central, simplificando a manutenção e o rastreamento de erros.
+A interação com o back-end é centralizada no arquivo api/api.ts, utilizando o Axios para chamadas HTTP. Todas as requisições passam por esse ponto central, simplificando a manutenção e o rastreamento de erros.
 
 **8. Responsividade**
 
@@ -70,8 +70,8 @@ O layout é responsivo, garantindo uma boa experiência em dispositivos móveis 
 
 ## Modelagem no Prisma
 
-Foi criada uma tabela no banco de dados para armazenar as notas/comentários. O arquivo schema.prisma foi atualizado no projeto de API para refletir essa estrutura.
-Necessário adicionar a variável "DATABASE_URL" no arquivo ".env", informando o diretório do Prisma do projeto e posteriormente executar o comando para execução correta do Prisma:
+Foi criada uma tabela no banco de dados para armazenar as notas/comentários. O arquivo schema.prisma foi atualizado no projeto Backend da API para refletir essa estrutura.
+Necessário adicionar a variável "DATABASE_URL" no arquivo ".env" do projeto da API, informando o diretório do Prisma do projeto e posteriormente executar o comando para execução correta do Prisma:
 
    ```bash
    npx prisma migrate dev
@@ -157,6 +157,34 @@ Respostas de erro, como falhas de autenticação ou dados inválidos, eram trata
 Foi configurado um arquivo central (api.ts) para instanciar e exportar o Axios, facilitando a reutilização das configurações e tornando o código mais organizado.
 
 Esse uso do Axios proporcionou uma comunicação eficaz e simplificada com o servidor, com fácil tratamento de erros e suporte a requisições assíncronas.
+
+## Hooks e Componentes Funcionais
+
+No projeto, Hooks e Componentes Funcionais foram amplamente utilizados para promover uma abordagem moderna e eficiente no desenvolvimento da aplicação React. Aqui estão as principais razões e formas de utilização:
+
+**1. Uso de Componentes Funcionais**
+
+**Simplicidade e Legibilidade:** Componentes funcionais são mais simples de escrever e entender em comparação aos componentes de classe, proporcionando uma estrutura de código mais limpa e concisa.
+
+**Facilidade de Manutenção:** Como os componentes funcionais não possuem ciclos de vida complexos, sua manutenção e testes são mais diretos.
+
+**Renderização mais eficiente:** Componentes funcionais ajudam na renderização mais eficiente, já que não possuem a sobrecarga dos métodos de ciclo de vida de componentes de classe.
+
+**2. Uso de Hooks**
+
+**useState:** Foi usado para gerenciar o estado dentro dos componentes funcionais. Por exemplo, no componente de login, os hooks useState controlam o estado dos campos de entrada (username, password) e também a gestão de mensagens de erro (error).
+
+**useEffect:** Utilizado para realizar efeitos colaterais em componentes funcionais, como fazer chamadas à API quando o componente for montado, ou redirecionar o usuário após a autenticação.
+
+**useContext:** Permite o compartilhamento de estado global entre componentes sem a necessidade de passar props manualmente. No projeto, o hook useContext foi utilizado em conjunto com um contexto de autenticação (AuthContext), permitindo que informações como o status de login e o token de autenticação fossem acessíveis em qualquer parte da aplicação.
+
+**3. Vantagens no Projeto**
+
+**Reutilização de Lógica:** Os hooks permitiram encapsular lógica reutilizável, como autenticação e manipulação de formulários, dentro de funções puras, facilitando a modularização e o reaproveitamento do código.
+
+**Gerenciamento de Estado Local e Global:** Os hooks como useState e useEffect ajudaram a gerenciar o estado local do componente, enquanto hooks como useContext ajudaram a gerenciar o estado global de autenticação, mantendo a aplicação simples e eficiente.
+
+**Desempenho:** Com a utilização de hooks, o código tornou-se mais eficiente e com melhor performance, já que hooks como useEffect evitam chamadas desnecessárias a APIs ou atualizações de estado.
 
 ## Estrutura Geral do Projeto
 
