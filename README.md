@@ -66,6 +66,67 @@ O layout é responsivo, garantindo uma boa experiência em dispositivos móveis 
 - Styled Components: Para estilização baseada em componentes.
 - ESLint: Ferramentas de linting e formatação.
 - Context API com Hooks: Para gerenciar autenticação e estado global.
+- Prisma: Utilizado como ORM para facilitar a interação com o banco de dados na implementação do recurso de notas no projeto de posts.
+
+## Modelagem no Prisma
+
+Foi criada uma tabela no banco de dados para armazenar as notas/comentários. O arquivo schema.prisma foi atualizado no projeto de API para refletir essa estrutura.
+Necessário adicionar a variável "DATABASE_URL" no arquivo ".env", informando o diretório do Prisma do projeto e posteriormente executar o comando para execução correta do Prisma:
+
+   ```bash
+   npx prisma migrate dev
+   ```
+
+**Vantagens do Prisma:**
+
+- **Facilidade no Gerenciamento de Relacionamentos:** O Prisma simplificou a definição e manipulação das relações entre Post e Notas.
+- **Redução de Código Boilerplate:** A abstração fornecida pelo Prisma eliminou a necessidade de escrever consultas SQL complexas.
+- **Validação Automática:** A tipagem estática do Prisma evitou erros em tempo de execução ao manipular os dados.
+
+## Redux
+
+Para esse projeto utilizamos o Redux para gerenciar o estado da aplicação, ele recebe ordens (ações) e decide como atualizar o estado global, resumidamente:
+
+- O código define um estado global para posts, gerenciado pelo Redux.
+- As actions descrevem mudanças no estado e são consumidas pelo postReducer.
+- A store unifica os reducers e mantém o estado global acessível à aplicação.
+- A estrutura modular facilita a escalabilidade e manutenção do código.
+
+No contexto do projeto de posts, o reducer ajuda a centralizar e controlar toda a lógica de atualização de estado:
+
+- **Adicionar Posts:** Atualiza a lista com um novo post.
+- **Excluir Posts:** Remove um post indesejado.
+- **Pesquisar Posts:** Refina o estado com base na palavra-chave digitada.
+- **Gerenciar Carregamento e Erros:** Atualiza o estado para refletir quando algo está carregando ou se um erro ocorreu.
+
+**Descrição das Ações**
+
+- setPosts: Atualiza a lista de posts.
+- setSearchKeyword: Atualiza a palavra-chave para busca.
+- setLoading: Atualiza o estado de carregamento (boolean).
+- setError: Define uma mensagem de erro (ou null para limpar erros).
+- addPost: Adiciona um novo post à lista.
+- deletePost: Remove um post pelo seu id.
+Essas ações são usadas para modificar o estado global gerenciado pelo Redux.
+
+**Benefícios**
+
+- **Centralização:** Toda a lógica de estado está em um só lugar.
+- **Imutabilidade:** Cada atualização cria um novo estado, garantindo consistência.
+- **Escalabilidade:** Fica fácil adicionar novos tipos de ações ou alterar a lógica.
+
+## Token
+
+Implementado no projeto validação de token por tempo pré definido (10 minutos).
+A checagem do tempo de inatividade será realizada de forma contínua para cada nova interação do professor e renovando o token se necessário.
+
+Caso o tempo de inatividade seja superior ao definido o professor será deslogado e redirecionado a tela de login.
+
+## Styled-Components
+
+O Styled-Components é uma biblioteca poderosa para estilização em React, que permite definir estilos diretamente no JavaScript. Essa abordagem encapsula os estilos em cada componente, evitando conflitos globais e promovendo uma manutenção mais simples e eficiente, além de facilitar a reutilização de código.
+
+No projeto de posts, o Styled-Components foi aplicado para criar uma interface bem estruturada e modular. Cada componente foi estilizado de forma isolada, garantindo que os estilos permanecessem organizados e livres de interferências externas. Além disso, a possibilidade de personalizar estilos com base em propriedades trouxe uma flexibilidade significativa, permitindo a criação de componentes dinâmicos e adaptáveis às necessidades da aplicação.
 
 ## Estrutura Geral do Projeto
 
@@ -76,6 +137,10 @@ src/
 ├── pages/               # Páginas principais da aplicação
 |   ├── /Auth            # Páginas responsáveis por validação de autenticação do usuário (professor)
 |   ├── /Header          # Página responsável por renderizer o Header (Cabeçalho) padrão em todas as páginas
+|   ├── /Note            # Página responsável por renderizer a página de notas/comentários
+|   ├── /Tooltip         # Página responsável por renderizer tooltip das notas/comentários adicionados nos posts
+├── reducers/            # Páginas principais da aplicação
+|   ├── /post            # Gerenciador de estado Redux
 ├── styles/              # Estilos globais e temas
 ├── api.ts               # Configuração de Axios e chamadas à API
 ├── App.tsx              # Arquivo principal do aplicativo
@@ -87,7 +152,7 @@ src/
 
 ## Funcionalidades
 
-- Login e Logout com gerenciamento de autenticação.
+- Login e Logout com gerenciamento de autenticação via token.
 - Listagem de posts.
 - Leitura de posts.
 - Busca de posts por palavra-chave.
@@ -147,11 +212,16 @@ Este projeto está totalmente containerizado utilizando o Docker:
 ![image](https://github.com/user-attachments/assets/9c8b3928-1a6e-43b5-9677-f90b2257a57f)
 
 - Caso seja um professor, insira suas credenciais.
-- Professores serão redirecionados para a página de gerenciamento de posts. Alunos irão para a página de visualização de posts.
+- Se as credenciais estejam válidas (usuário/senha), após clique no botão "Entrar como Professor", os professores serão redirecionados para a página de gerenciamento de posts.
+- Para caso de alunos, não é necessário informar credenciais, basta clicar no botão "Entrar como Aluno" que será redirecionado para a página de lista de posts.
 
 **Professor:**
 
 ![image](https://github.com/user-attachments/assets/7a306bd2-0f36-45ef-933d-060612f076c3)
+
+- Em caso de usuário e/ou senha inválidas, sistem exibirá mensagem de validação e não permitirá o login:
+
+![image](https://github.com/user-attachments/assets/ba9adc7b-4784-47b6-b619-76a6a16fc226)
 
 **Aluno:**
 
@@ -159,24 +229,31 @@ Este projeto está totalmente containerizado utilizando o Docker:
 
 **2. Gerenciamento de Posts**
 
-**Criar Post:** Professores podem criar posts preenchendo o formulário na página de criação.
+**Criar Post:** Professores podem criar posts preenchendo o formulário na página de criação. Para isso, na página de Gerenciamentos de Posts, clique no botão "Criar Novo Post" e o sistema abrirá a página de "Criar Novo Post".
+Informe o Título / Autor / Conteúdo do Post desejado e clique em "Criar Post", caso as informações estejam válidas, será armazenado o novo Post do professor no Banco de Dados.
 
+![image](https://github.com/user-attachments/assets/d4d98d4f-c50a-4d91-a210-195eece2839c)
 ![image](https://github.com/user-attachments/assets/bc540002-729e-49b9-bfb9-563229d4b009)
 
-**Editar Post:** Professores podem atualizar informações de um post existente, clicando no ícone de lápis na página de lista de posts.
+Caso alguma validação de gravação não seja atendida, sistema apresentará mensagem de aviso ao usuário:
+
+![image](https://github.com/user-attachments/assets/4b2d2e5e-00cd-4181-b5fa-26dae9f7d0c8)
+
+**Editar Post:** Professores podem atualizar informações de um post existente, clicando no botão "Editar" na página de Gerenciamento de Posts, dessa forma, o sistema abrirá a página de "Editar Post".
+Ajuste as informações conforme a necessidade e clique em "Salvar Alterações".
 
 ![image](https://github.com/user-attachments/assets/ea453f10-8703-4fb9-90f9-e0c7d3cdbd86)
 ![image](https://github.com/user-attachments/assets/66bd51f4-359b-4fe7-b435-598de826011f)
 
-**Excluir Post:** Professores podem remover posts irrelevantes, clicando no ícone de lixeira na página de lista de posts.
+**Excluir Post:** Professores podem remover posts irrelevantes, clicando no botão "Excluir" na página de Gerenciamento de Posts.
 
 ![image](https://github.com/user-attachments/assets/0a638b98-9c5b-4aca-a0b1-634a1ef66e4c)
 
 **3. Visualizar Posts**
 
-Alunos podem visualizar posts listados com detalhes, basta clicar sobre o card do post desejado.
+Alunos podem visualizar posts listados com detalhes, basta clicar sobre o card do post desejado na página de Lista de Posts.
 
-![image](https://github.com/user-attachments/assets/1f39a823-da9c-4516-9abb-7490652c104e)
+![image](https://github.com/user-attachments/assets/5fdff4bd-7e86-47a5-864e-6717c5dd2b07)
 
 **4. Busca Posts por Palavra-Chave**
 
@@ -184,6 +261,32 @@ Alunos e Professores podem filtrar/buscar Posts de acordo com Palavras-Chaves de
 Para caso de Alunos serão filtrados todos os Posts do Banco de Dados, para caso dos Professores serão filtrados apenas os Posts que pertencem ao professor logado.
 
 ![image](https://github.com/user-attachments/assets/61b082ea-9273-40cc-a3e5-f54726fd5aae)
+
+**5. Adicionar Comentários/Notas em Post**
+
+Para adicionar um comentário/nota em um post, basta clicar no ícone de lápis em amarelo na página de leitura do post.
+Após o clique, será aberto uma tela em modal para seleção do(s) trecho(s) desejado(s) para adicionar nota(s) conforme a necessidade do aluno.
+
+![image](https://github.com/user-attachments/assets/cf3816f8-3f12-4c9a-8de4-48f3af3a4d7d)
+
+Selecione o trecho e digite sua nota/comentário desejado e posteriormente clique em "Salvar":
+
+![image](https://github.com/user-attachments/assets/ee6f1f19-0d0e-4020-a58b-861c5ead7d76)
+
+A nota/comentário será adicionado no trecho informado:
+
+![image](https://github.com/user-attachments/assets/cb31c6dd-dc01-4841-96a6-f1b0d9cf9b10)
+
+**6. Cabeçalho**
+
+Todas as páginas possuem o cabeçalho com dois ícones, o primeiro ícone, ao clicar será redirecionado para a lista de posts.
+Caso esteja logado como professor, será aberto a página de Gerencimanento de Posts, caso esteja como aluno, será posicionado na página de Lista de Posts.
+
+![image](https://github.com/user-attachments/assets/42b9256d-4e93-49da-b7d9-724c0e2c9058)
+
+O segundo ícone, desloga o professor e redireciona o usuário para a tela inicial.
+
+![image](https://github.com/user-attachments/assets/36fcdef2-dc31-44ce-9085-bfef2ce81dbb)
 
 ## Desafios Enfrentados pela Equipe Durante o Desenvolvimento
 
