@@ -66,7 +66,7 @@ O layout é responsivo, garantindo uma boa experiência em dispositivos móveis 
 - **Styled Components:** Para estilização baseada em componentes.
 - **ESLint:** Ferramentas de linting e formatação.
 - **Context API com Hooks:** Para gerenciar autenticação e estado global.
-- **Vite:** Servidor de desenvolvimento rápido, empacotamento para produção.
+- **Vite:** Oferece um ambiente/servidor de desenvolvimento leve e rápido.
 - **Prisma implementado à API:** Utilizado como ORM para facilitar a interação com o banco de dados na implementação do recurso de notas no projeto de posts.
 
 ## Vite
