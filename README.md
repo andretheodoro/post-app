@@ -1,6 +1,6 @@
 # Interface Gráfica - Blogging - React
 
-Este projeto Front-End é uma aplicação web responsiva desenvolvida em React para gerenciar posts. Ela se conecta à [API REST de Posts](https://github.com/andretheodoro/api-post-rest) para criar, editar, listar e excluir publicações, oferecendo funcionalidades como autenticação, autorização e interface amigável.
+Este projeto Front-End é uma aplicação web responsiva desenvolvida em React para gerenciar posts. Ela se conecta à [API REST de Posts](https://github.com/andretheodoro/api-post-rest) para criar, editar, excluir, visualizar e listar publicações, oferecendo funcionalidades como autenticação, busca de post por palavra chave e interface amigável.
 
 ## Repositório Github
 
@@ -9,11 +9,11 @@ https://github.com/andretheodoro/post-app
 
 ## Descrição
 
-Após o sucesso do desenvolvimento da aplicação de blogging dinâmico utilizando a plataforma OutSystems e a implementação do back-end em Node.js, criamos uma interface gráfica robusta, intuitiva e eficiente para esta aplicação. Este desafio focará em desenvolver o front-end, proporcionando uma experiência de usuário excelente tanto para professores(as) quanto para estudantes.
+Após o sucesso do desenvolvimento da aplicação de blogging dinâmico utilizando a plataforma OutSystems e a implementação do back-end em Node.js, criamos uma interface gráfica robusta, intuitiva e eficiente para esta aplicação. Este desafio focará em desenvolver o front-end, proporcionando uma experiência de usuário excelente tanto para professores quanto para estudantes.
 
 ## Objetivo
 
-Desenvolver uma interface gráfica para a aplicação de blogging utilizando React. A aplicação deve ser responsiva, acessível e fácil de usar, permitindo aos docentes e alunos(as) interagir com os diversos endpoints REST já implementados no back-end.
+Desenvolver uma interface gráfica para a aplicação de blogging utilizando React. A aplicação deve ser responsiva, acessível e fácil de usar, permitindo aos docentes e alunos interagir com os diversos endpoints REST já implementados no back-end.
 
 ## Arquitetura da Aplicação
 
@@ -25,21 +25,21 @@ Desenvolvemos o projeto utilizando o React, com uma ampla adoção na indústria
 
 Os Hooks permitem o gerenciamento eficiente de estados e ciclos de vida em componentes funcionais, que são mais concisos e fáceis de entender em comparação aos componentes de classe. Essa abordagem traz as seguintes vantagens:
 
-- Simplicidade e legibilidade: Os componentes funcionais, combinados com hooks como useState e useEffect, tornam o código mais intuitivo e menos verboso.
-- Reutilização de lógica: Hooks personalizados permitem encapsular e reutilizar lógica de estado entre diferentes componentes.
-- Modernidade e suporte: Hooks e componentes funcionais são a abordagem recomendada pelas versões mais recentes do React, garantindo compatibilidade e acesso a novos recursos.
+- **Simplicidade e legibilidade:** Os componentes funcionais, combinados com hooks como useState e useEffect, tornam o código mais intuitivo e menos verboso.
+- **Reutilização de lógica:** Hooks personalizados permitem encapsular e reutilizar lógica de estado entre diferentes componentes.
+- **Modernidade e suporte:** Hooks e componentes funcionais são a abordagem recomendada pelas versões mais recentes do React, garantindo compatibilidade e acesso a novos recursos.
 A escolha por essa combinação resulta em um código mais limpo, modular e fácil de manter, atendendo às melhores práticas do desenvolvimento frontend.
 
 **3. Componentização**
 
 A aplicação é desenvolvida utilizando o conceito de componente reutilizável, que encapsulam tanto a lógica quanto os estilos de cada parte da interface:
 
-- Header: Um componente fixo usado em todas as páginas com opções de navegação (lista de posts e deslogar do sistema).
+- **Header:** Um componente fixo usado em todas as páginas com opções de navegação (lista de posts e deslogar do sistema).
 
 **4. Gerenciamento de Estado**
 
-- Autenticação: Implementada com a Context API, que centraliza o controle de login, logout e persistência de tokens usando localStorage.
-- Hooks Personalizados: Lógica específica, como manipulação de tokens ou validação, é encapsulada em hooks para reutilização e melhor organização do código.
+- **Autenticação:** Implementada com a Context API, que centraliza o controle de login, logout e persistência de tokens usando localStorage.
+- **Hooks Personalizados:** Lógica específica, como manipulação de tokens ou validação, é encapsulada em hooks para reutilização e melhor organização do código.
 
 **5. Navegação SPA**
 
@@ -47,7 +47,7 @@ A navegação entre as páginas é gerenciada pelo React Router, com rotas prote
 
 **6. Estilização**
 
-A estilização utiliza styled-components, permitindo que estilos sejam definidos diretamente em arquivos de componentes. Isso resulta em um design responsivo e temas facilmente configuráveis.
+A estilização da aplicação utiliza styled-components, permitindo que estilos sejam definidos diretamente em arquivos de componentes. Isso resulta em um design responsivo e temas facilmente configuráveis.
 
 **7. Comunicação com a API**
 
@@ -59,14 +59,14 @@ O layout é responsivo, garantindo uma boa experiência em dispositivos móveis 
 
 ## Tecnologias Utilizadas
 
-- React: Biblioteca para criação de interfaces de usuário, utilizando hooks e componentes funcionais.
-- React Router: Para navegação entre páginas.
-- Axios: Para consumo da API REST.
-- React Icons: Ícones para estilização.
-- Styled Components: Para estilização baseada em componentes.
-- ESLint: Ferramentas de linting e formatação.
-- Context API com Hooks: Para gerenciar autenticação e estado global.
-- Prisma: Utilizado como ORM para facilitar a interação com o banco de dados na implementação do recurso de notas no projeto de posts.
+- **React:** Biblioteca para criação de interfaces de usuário, utilizando hooks e componentes funcionais.
+- **React Router:** Para navegação entre páginas.
+- **Axios:** Para consumo da API REST.
+- **React Icons:** Ícones para estilização.
+- **Styled Components:** Para estilização baseada em componentes.
+- **ESLint:** Ferramentas de linting e formatação.
+- **Context API com Hooks:** Para gerenciar autenticação e estado global.
+- **Prisma implementado à API:** Utilizado como ORM para facilitar a interação com o banco de dados na implementação do recurso de notas no projeto de posts.
 
 ## Modelagem no Prisma
 
