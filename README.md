@@ -66,7 +66,18 @@ O layout é responsivo, garantindo uma boa experiência em dispositivos móveis 
 - **Styled Components:** Para estilização baseada em componentes.
 - **ESLint:** Ferramentas de linting e formatação.
 - **Context API com Hooks:** Para gerenciar autenticação e estado global.
+- **Vite:** Servidor de desenvolvimento rápido, empacotamento para produção.
 - **Prisma implementado à API:** Utilizado como ORM para facilitar a interação com o banco de dados na implementação do recurso de notas no projeto de posts.
+
+## Vite
+
+O Vite foi utilizado para inicializar o projeto e criar o ambiente de desenvolvimento front-end.
+
+Ele fornece um servidor de desenvolvimento rápido, com suporte nativo a ES Modules, permitindo recarregamento instantâneo das mudanças no código e oferecendo fácil integração com TypeScript, Styled Components e outras ferramentas usadas no projeto.
+
+O Vite não é apenas uma ferramenta auxiliar, mas faz parte do fluxo principal de desenvolvimento.
+Ele influencia diretamente a experiência de desenvolvimento e o desempenho da aplicação final.
+A decisão de usá-lo reflete a escolha por tecnologias modernas e eficientes para melhorar o desenvolvimento front-end.
 
 ## Modelagem no Prisma
 
