@@ -120,7 +120,7 @@ Essas ações são usadas para modificar o estado global gerenciado pelo Redux.
 Implementado no projeto validação de token por tempo pré definido (10 minutos).
 A checagem do tempo de inatividade será realizada de forma contínua para cada nova interação do professor e renovando o token se necessário.
 
-Caso o tempo de inatividade seja superior ao definido o professor será deslogado e redirecionado a tela de login.
+Caso o tempo de inatividade seja superior ao definido, o professor será deslogado em sua próxima ação e redirecionado à tela de login.
 
 Além disso, para as seguintes rotas de uso exclusivo do professor foi implementado a utilização de rotas protegidas (ProtectedRoute - verificação de login/token ativo):
 
@@ -147,10 +147,11 @@ Dependendo da resposta, o token de autenticação é armazenado no localStorage 
 
 - **Envio de Dados:**
 
-O Axios foi utilizado para enviar dados de formulários, como no caso da criação e atualização de posts, através de requisições POST/PUT/DELETE.
-Tratamento de Erros:
+O Axios foi utilizado para enviar dados de formulários, como no caso da criação, atualização e exclusão de posts, através de requisições POST/PUT/DELETE.
 
-Respostas de erro, como falhas de autenticação ou dados inválidos, eram tratadas com um bloco try/catch, exibindo mensagens de erro apropriadas para o usuário.
+- **Tratamento de Erros:**
+
+Respostas de erro, como falhas de autenticação ou dados inválidos, são tratadas com um bloco try/catch, exibindo mensagens de erro apropriadas para o usuário.
 
 - **Configuração Global:**
 
@@ -197,8 +198,8 @@ src/
 |   ├── /Header          # Página responsável por renderizer o Header (Cabeçalho) padrão em todas as páginas
 |   ├── /Note            # Página responsável por renderizer a página de notas/comentários
 |   ├── /Tooltip         # Página responsável por renderizer tooltip das notas/comentários adicionados nos posts
-├── reducers/            # Páginas principais da aplicação
-|   ├── /post            # Gerenciador de estado Redux
+├── reducers/            # Gerenciador de estado Redux
+|   ├── /post            # Gerenciador de estado Redux - Post
 ├── styles/              # Estilos globais e temas
 ├── api.ts               # Configuração de Axios e chamadas à API
 ├── App.tsx              # Arquivo principal do aplicativo
@@ -273,21 +274,21 @@ Este projeto está totalmente containerizado utilizando o Docker:
 - Se as credenciais estejam válidas (usuário/senha), após clique no botão "Entrar como Professor", os professores serão redirecionados para a página de gerenciamento de posts.
 - Para caso de alunos, não é necessário informar credenciais, basta clicar no botão "Entrar como Aluno" que será redirecionado para a página de lista de posts.
 
-**Professor:**
+**1.1. Professor:**
 
 ![image](https://github.com/user-attachments/assets/7a306bd2-0f36-45ef-933d-060612f076c3)
 
-- Em caso de usuário e/ou senha inválidas, sistem exibirá mensagem de validação e não permitirá o login:
+- Em caso de usuário e/ou senha inválidas, sistema exibirá mensagem de validação e não permitirá o login:
 
 ![image](https://github.com/user-attachments/assets/ba9adc7b-4784-47b6-b619-76a6a16fc226)
 
-**Aluno:**
+**1.2. Aluno:**
 
 ![image](https://github.com/user-attachments/assets/5efeebc3-8224-4aa7-b4df-930e2caa8962)
 
 **2. Gerenciamento de Posts**
 
-**Criar Post:** Professores podem criar posts preenchendo o formulário na página de criação. Para isso, na página de Gerenciamentos de Posts, clique no botão "Criar Novo Post" e o sistema abrirá a página de "Criar Novo Post".
+**2.1. Criar Post:** Professores podem criar posts preenchendo o formulário na página de criação. Para isso, na página de Gerenciamentos de Posts, clique no botão "Criar Novo Post" e o sistema abrirá a página de "Criar Novo Post".
 Informe o Título / Autor / Conteúdo do Post desejado e clique em "Criar Post", caso as informações estejam válidas, será armazenado o novo Post do professor no Banco de Dados.
 
 ![image](https://github.com/user-attachments/assets/d4d98d4f-c50a-4d91-a210-195eece2839c)
@@ -297,13 +298,13 @@ Caso alguma validação de gravação não seja atendida, sistema apresentará m
 
 ![image](https://github.com/user-attachments/assets/4b2d2e5e-00cd-4181-b5fa-26dae9f7d0c8)
 
-**Editar Post:** Professores podem atualizar informações de um post existente, clicando no botão "Editar" na página de Gerenciamento de Posts, dessa forma, o sistema abrirá a página de "Editar Post".
+**2.2. Editar Post:** Professores podem atualizar informações de um post existente, clicando no botão "Editar" na página de Gerenciamento de Posts, dessa forma, o sistema abrirá a página de "Editar Post".
 Ajuste as informações conforme a necessidade e clique em "Salvar Alterações".
 
 ![image](https://github.com/user-attachments/assets/ea453f10-8703-4fb9-90f9-e0c7d3cdbd86)
 ![image](https://github.com/user-attachments/assets/66bd51f4-359b-4fe7-b435-598de826011f)
 
-**Excluir Post:** Professores podem remover posts irrelevantes, clicando no botão "Excluir" na página de Gerenciamento de Posts.
+**2.3. Excluir Post:** Professores podem remover posts irrelevantes, clicando no botão "Excluir" na página de Gerenciamento de Posts.
 
 ![image](https://github.com/user-attachments/assets/0a638b98-9c5b-4aca-a0b1-634a1ef66e4c)
 
@@ -348,7 +349,7 @@ O segundo ícone, desloga o professor e redireciona o usuário para a tela inici
 
 ## Aplicação Responsiva
 
-Através da utilização de Styled-Components e outras técnicas foi desenvolvida uma aplicação responsiva, conforme segue nas imagens abaixo:
+Através da utilização de Styled-Components e outras técnicas foi desenvolvida uma aplicação responsiva, conforme segue nas imagens abaixo (simulado em iPhone 13 PRO):
 
 ![image](https://github.com/user-attachments/assets/5ec5602a-d90d-4f01-92a8-45a3d32bb57a)
 ![image](https://github.com/user-attachments/assets/5e744a0a-1861-49d5-9bb8-d0701c218995)
@@ -366,7 +367,7 @@ O desenvolvimento deste projeto apresentou diversos desafios técnicos e organiz
 
 Desafio: Ajustar o layout da aplicação para proporcionar uma boa experiência em telas pequenas.
 
-Solução: Utilizamos styled-components com media queries para criar estilos responsivos, ajustando margens, paddings, fontes e outros elementos visuais.
+Solução: Utilizamos styled-components com media queries para criar estilos responsivos, ajustando os elementos visuais.
 
 **2. Integração com a API de Posts**
 
