@@ -101,12 +101,12 @@ No contexto do projeto de posts, o reducer ajuda a centralizar e controlar toda 
 
 **Descrição das Ações**
 
-- setPosts: Atualiza a lista de posts.
-- setSearchKeyword: Atualiza a palavra-chave para busca.
-- setLoading: Atualiza o estado de carregamento (boolean).
-- setError: Define uma mensagem de erro (ou null para limpar erros).
-- addPost: Adiciona um novo post à lista.
-- deletePost: Remove um post pelo seu id.
+- **setPosts:** Atualiza a lista de posts.
+- **setSearchKeyword:** Atualiza a palavra-chave para busca.
+- **setLoading:** Atualiza o estado de carregamento (boolean).
+- **setError:** Define uma mensagem de erro (ou null para limpar erros).
+- **addPost:** Adiciona um novo post à lista.
+- **deletePost:** Remove um post pelo seu id.
 Essas ações são usadas para modificar o estado global gerenciado pelo Redux.
 
 **Benefícios**
