@@ -35,7 +35,7 @@ jobs:
         run: npm install # ou o comando correspondente ao seu gerenciador de pacotes
 
       - name: Executar Build
-        run: npm run dev
+        run: npm run build
 
   create-pull-request:
     runs-on: ubuntu-latest
