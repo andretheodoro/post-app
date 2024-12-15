@@ -3,7 +3,7 @@ name: Build App and Push Docker Image
 on:
   push:
     branches:
-      - develop
+      - main
 
   pull_request:
     branches:
