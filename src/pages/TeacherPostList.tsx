@@ -199,7 +199,7 @@ const TeacherPostList: React.FC = () => {
       dispatch(setPosts(response.data));
     } catch (error) {
       console.log('Erro ao carregar posts.', error);
-      dispatch(setError('Erro ao carregar posts.'));
+      dispatch(setError(error.response.data.message));
     }
   };
 

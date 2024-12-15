@@ -3,6 +3,7 @@ import { FaMarker } from 'react-icons/fa';
 import styled from 'styled-components';
 import api from '../../api/api';
 import { AxiosResponse } from 'axios';
+import { SuccessNotification, SuccessNotificationContent, WarningNotification, WarningNotificationContent } from '../../styles/CommonStyled';
 
 // Estilos para o botão de nota
 const ButtonNote = styled.button`
@@ -43,7 +44,7 @@ const ModalTitle = styled.h3`
 
 const ModalOverlay = styled.div`
   position: absolute;
-  top: -50px;
+  top: 0px;
   left: 0;
   width: 100%;
   height: 100%;
@@ -55,11 +56,22 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  background-color: white;
+ background-color: white;
   padding: 20px;
   border-radius: 10px;
-  width: 50%;
-  height: 70%;
+  width: 90%;  
+  max-width: 600px;  
+  height: auto;  
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin: 0 auto; 
+  
+  @media (max-width: 768px) {
+    width: 95%;  
+    padding: 15px;
+  }
 `;
 
 const Button = styled.button<{ bgColor: string }>`
@@ -79,6 +91,19 @@ const Button = styled.button<{ bgColor: string }>`
     background-color: ${(props) => (props.bgColor === '#007bff' ? '#0056b3' : '#218838')};
   }
 `;
+
+const TextContent = styled.div`
+  white-space: pre-wrap; 
+  /* word-wrap: break-word;  */
+  max-height: 250px; 
+  overflow: scroll; 
+  margin-top: 10px;
+  
+  @media (max-width: 768px) {
+    max-height: 200px;
+  }
+`;
+
 
 interface Note {
     id: number;
@@ -104,10 +129,22 @@ const Modal: React.FC<ModalProps> = ({ note, onClose }) => {
         length: 0,
     });
 
+    const [warning, setWarning] = useState('');
+    const [success, setSuccess] = useState('');
+
     console.log(note);
     const [noteData, setNoteData] = useState<Note | null>(null);
+
     useEffect(() => {
-        setNoteData(note); // Atualiza os dados da nota com base nas props recebidas
+        if (noteData) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    }, [noteData]);
+
+    useEffect(() => {
+        setNoteData(note);
     }, [note]);
 
     // Função para capturar a seleção de texto
@@ -143,8 +180,10 @@ const Modal: React.FC<ModalProps> = ({ note, onClose }) => {
     const handleSaveNote = () => {
         if (noteData) {
             const { text, start, end, postId } = noteData;
-            if (start == 0 && end == 0) {
+
+            if ((start == 0 && end == 0) || (start - end == 0)) {
                 console.log("selecione o trecho para adicionar a nota");
+                setWarning('Selecione o trecho para adicionar a nota');
                 return;
             }
             // Supondo que a API de salvar a nota seja algo assim:
@@ -156,18 +195,45 @@ const Modal: React.FC<ModalProps> = ({ note, onClose }) => {
             })
                 .then((response: AxiosResponse) => {
                     console.log("response: ", response)
-                    // Atualiza a lista de notas com a nova nota salva
-                    setNoteData(null); // Limpar os dados da nota
-                    onClose();
+                    setSuccess('Nota salva com sucesso');
+
+                    setTimeout(() => {
+                        setNoteData(null);
+                        onClose();
+                    }, 5000);
                 })
                 .catch((error) => {
+                    setWarning('Ocorreu um problema ao adicionar nota');
                     console.error('Erro ao salvar a nota:', error);
                 });
         }
     };
 
+
+    const handleWarningClick = () => {
+        setWarning('');
+    };
+    const handleSuccessClick = () => {
+        setSuccess('');
+    };
+
     return (
+
         <ModalOverlay>
+            {
+                warning &&
+                <WarningNotification>
+                    <WarningNotificationContent onClick={handleWarningClick}>{warning}</WarningNotificationContent>
+                </WarningNotification>
+            }
+
+            {
+                success &&
+                <SuccessNotification>
+                    <SuccessNotificationContent onClick={handleSuccessClick}>{success}</SuccessNotificationContent>
+                </SuccessNotification>
+            }
+
             <ModalContainer>
                 <ModalTitle>Adicionar Nota</ModalTitle>
                 <div>
@@ -217,9 +283,10 @@ const Modal: React.FC<ModalProps> = ({ note, onClose }) => {
                                 overflow: 'auto',
                             }}
                         >
-                            <span>
+                            <TextContent>
                                 {noteData?.textPost}
-                            </span>
+                            </TextContent>
+
                         </div>
                         {/* <div
                         style={{

@@ -108,7 +108,10 @@ const TooltipWithHighlight: React.FC<TooltipWithHighlightProps> = ({
 
     elements.push(<span key="after">{text.slice(currentIndex)}</span>);
 
-    return <>{elements}</>;
+    return <div style={{
+        whiteSpace: 'pre-wrap',
+        wordWrap: 'break-word',
+    }}>{elements}</div>;
 };
 
 export default TooltipWithHighlight;

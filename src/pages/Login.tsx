@@ -96,6 +96,7 @@ const Button = styled.button<{ bgColor: string }>`
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-bottom: 1rem;
 
   &:hover {
     background-color: ${(props) => (props.bgColor === '#007bff' ? '#0056b3' : '#218838')};
@@ -171,7 +172,7 @@ const Login: React.FC = () => {
           >
             Entrar como Professor
           </Button>
-          <br />
+
           <Button
             bgColor="#007bff"
             onClick={(e) => {
