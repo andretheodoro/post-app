@@ -171,7 +171,7 @@ const TeacherPostList: React.FC = () => {
       );
 
       dispatch(setPosts(filteredPosts));
-    } catch (error) {
+    } catch (error: any) {
       console.log('Erro ao buscar posts.', error);
       dispatch(setError(error.response.data.message));
     } finally {
@@ -197,7 +197,7 @@ const TeacherPostList: React.FC = () => {
       }
 
       dispatch(setPosts(response.data));
-    } catch (error) {
+    } catch (error: any) {
       console.log('Erro ao carregar posts.', error);
       dispatch(setError(error.response.data.message));
     }
