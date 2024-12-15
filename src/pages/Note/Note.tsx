@@ -138,8 +138,6 @@ const Modal: React.FC<ModalProps> = ({ note, onClose }) => {
     useEffect(() => {
         if (noteData) {
             document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'auto';
         }
     }, [noteData]);
 
@@ -369,6 +367,8 @@ const ButtonNoteComponent: React.FC<ButtonNoteComponentProps> = ({ idPost, textP
     const handleCloseModal = () => {
         refreshNote();
         setIsModalOpen(false);
+        console.clear();
+        document.body.style.overflow = 'auto';
     };
 
     // const handleSave = (noteData: { text: string, start: number, end: number, postId: number, textPost: string }) => {
