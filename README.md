@@ -135,7 +135,7 @@ Caso o tempo de inatividade seja superior ao definido, o professor será desloga
 
 Além disso, para as seguintes rotas de uso exclusivo do professor foi implementado a utilização de rotas protegidas (ProtectedRoute - verificação de login/token ativo):
 
-- TeacherPostList (Administração de Postagens)
+- TeacherPostList (Administração de Postagens - Editar/Excluir Post)
 - CreatePost (Criação de Postagens)
 - EditPost (Edição de Postagens)
 
@@ -274,6 +274,45 @@ Este projeto está totalmente containerizado utilizando o Docker:
   docker run -p 5173:5173 post-app
    ```
 
+**CI/CD**
+
+O workflow de CI/CD (Continuous Integration/Continuous Deployment) utilizado na aplicação de Gerenciamento de Posts automatiza o processo de integração e implantação da aplicação, garantindo que cada mudança no código seja validada e implantada de maneira consistente e eficiente.
+
+Principais Funcionalidades:
+
+- **Integração Contínua (CI):**
+Cada vez que uma nova alteração é enviada para o repositório (por exemplo, por meio de um pull request ou push), o workflow executa automaticamente uma série de verificações e testes.
+Essas verificações incluem a execução de testes unitários com Jest via conexão ao BD e em Mock, e a verificação de que a aplicação pode ser construída sem erros.
+
+- **Deployment Automatizado (CD):**
+Após a execução bem-sucedida dos testes, o workflow utiliza Docker para criar uma imagem da aplicação e fazer o push para o Docker Hub, utilizando as credenciais (DOCKER_USERNAME e DOCKER_PASSWORD).
+Em ambientes de produção, o workflow pode automatizar o deployment da imagem Docker para servidores ou serviços de nuvem, utilizando a imagem construída durante o processo de integração.
+
+**Benefícios:**
+  
+- **Automação:** Elimina a necessidade de processos manuais para testar e implantar a aplicação.
+- **Confiabilidade:** Garante que cada alteração no código seja verificada antes de ser mesclada ou implantada, evitando bugs em produção.
+- **Rapidez:** A automação do ciclo de desenvolvimento permite feedback rápido e maior eficiência na entrega de novas funcionalidades.
+
+O CI/CD torna o desenvolvimento da aplicação mais ágil e confiável, facilitando a manutenção e o crescimento contínuo do projeto.
+
+Variáveis a serem configuradas no ambiente do Github:
+
+- **DOCKER_PASSWORD**: A senha do usuário da conta Docker Hub, usada para autenticar o login no Docker Hub durante o processo de build e push de imagens Docker.
+- **DOCKER_USERNAME**: O nome de usuário da conta Docker Hub, utilizado para login no Docker Hub.
+
+Essas variáveis são fundamentais para configurar o ambiente de execução da aplicação e garantir que o CI/CD funcione corretamente no GitHub.
+
+A aplicação possui o diretório .github/workflows com o arquivo main.yml que através do workflow do GitHub Actions servirá para configurar o processo de integração contínua (CI/CD).
+Nesse arquivo foi configurado para que a branch "develop" realize os processos do workflow de CI/CD (Integração Contínua e Entrega Contínua), automatizando o processo de desenvolvimento e implantação de software. Ele serve para garantir que o código seja integrado regularmente, e em seguida, implantado de forma contínua ou quando uma nova versão estiver pronta, reduzindo o risco de erros e acelerando entregas. Resumidamente, o workflow de CI/CD ajuda a automatizar a entrega de software com mais qualidade, eficiência e rapidez.
+
+Etapas de execução das "Actions" configuradas e executadas com sucesso:
+
+![image](https://github.com/user-attachments/assets/29ba8c22-cfd0-4d86-9af1-8cfc85129243)
+![image](https://github.com/user-attachments/assets/7a09c578-ad9f-40f8-8c7b-437589b30aaf)
+
+
+
 ## Guia de Uso da Aplicação
 
 **1. Login**
@@ -282,7 +321,7 @@ Este projeto está totalmente containerizado utilizando o Docker:
 ![image](https://github.com/user-attachments/assets/9c8b3928-1a6e-43b5-9677-f90b2257a57f)
 
 - Caso seja um professor, insira suas credenciais.
-- Se as credenciais estejam válidas (usuário/senha), após clique no botão "Entrar como Professor", os professores serão redirecionados para a página de gerenciamento de posts.
+- Se as credenciais estiverem válidas (usuário/senha), após clique no botão "Entrar como Professor", os professores serão redirecionados para a página de gerenciamento de posts.
 - Para caso de alunos, não é necessário informar credenciais, basta clicar no botão "Entrar como Aluno" que será redirecionado para a página de lista de posts.
 
 **1.1. Professor:**
@@ -369,6 +408,9 @@ Através da utilização de Styled-Components e outras técnicas foi desenvolvid
 ![image](https://github.com/user-attachments/assets/12c195e8-edcb-4b9c-bb65-3d0905989a77)
 ![image](https://github.com/user-attachments/assets/37117f63-9d57-480d-ba62-15be1fab6609)
 ![image](https://github.com/user-attachments/assets/007d3f5d-13f7-4896-8511-52a019ab5669)
+![image](https://github.com/user-attachments/assets/fcc3918e-f61d-4e7c-95eb-d5515067bca7)
+![image](https://github.com/user-attachments/assets/ad072c2e-7bf6-4174-b6bd-734a863a809a)
+
 
 ## Desafios Enfrentados pela Equipe Durante o Desenvolvimento
 
@@ -393,3 +435,4 @@ A fim de aprimorar e evoluir o produto, elencamos algumas futuras melhorias que 
 - Separar notas por usuário x posts.
 - Ajustar identificação de notas para não permitir "colisão".
 - Permitir comentários gerais nos posts.
+- Permitir editar/excluir uma nota.
