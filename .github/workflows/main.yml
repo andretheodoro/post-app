@@ -24,7 +24,7 @@ jobs:
       - name: Configurar o Docker
         run: |
           docker login -u $DOCKER_USERNAME --password $DOCKER_PASSWORD
-          docker build -t $DOCKER_USERNAME/posts-app:latest 
+          docker build -t $DOCKER_USERNAME/posts-app:latest .
           docker push $DOCKER_USERNAME/posts-app:latest
       - name: Configurar Node.js
         uses: actions/setup-node@v4
