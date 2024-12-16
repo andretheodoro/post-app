@@ -326,6 +326,8 @@ Etapas de execução das "Actions" configuradas e executadas com sucesso:
 
 **1.1. Professor:**
 
+- Lista de Posts correspondente somente ao professor logado:
+  
 ![image](https://github.com/user-attachments/assets/7a306bd2-0f36-45ef-933d-060612f076c3)
 
 - Em caso de usuário e/ou senha inválidas, sistema exibirá mensagem de validação e não permitirá o login:
@@ -334,6 +336,8 @@ Etapas de execução das "Actions" configuradas e executadas com sucesso:
 
 **1.2. Aluno:**
 
+- Lista de Posts gerais (todos professores):
+  
 ![image](https://github.com/user-attachments/assets/5efeebc3-8224-4aa7-b4df-930e2caa8962)
 
 **2. Gerenciamento de Posts**
