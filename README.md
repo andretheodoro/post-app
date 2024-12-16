@@ -28,7 +28,7 @@ Os Hooks permitem o gerenciamento eficiente de estados e ciclos de vida em compo
 - **Simplicidade e legibilidade:** Os componentes funcionais, combinados com hooks como useState e useEffect, tornam o código mais intuitivo e menos verboso.
 - **Reutilização de lógica:** Hooks personalizados permitem encapsular e reutilizar lógica de estado entre diferentes componentes.
 - **Modernidade e suporte:** Hooks e componentes funcionais são a abordagem recomendada pelas versões mais recentes do React, garantindo compatibilidade e acesso a novos recursos.
-A escolha por essa combinação resulta em um código mais limpo, modular e fácil de manter, atendendo às melhores práticas do desenvolvimento frontend.
+  A escolha por essa combinação resulta em um código mais limpo, modular e fácil de manter, atendendo às melhores práticas do desenvolvimento frontend.
 
 **3. Componentização**
 
@@ -84,9 +84,9 @@ A decisão de usá-lo reflete a escolha por tecnologias modernas e eficientes pa
 Foi criada uma tabela no banco de dados para armazenar as notas/comentários. O arquivo schema.prisma foi atualizado no projeto Backend da API para refletir essa estrutura.
 Necessário adicionar a variável "DATABASE_URL" no arquivo ".env" do projeto da API, informando o diretório do Prisma do projeto e posteriormente executar o comando para execução correta do Prisma:
 
-   ```bash
-   npx prisma migrate dev
-   ```
+```bash
+npx prisma migrate dev
+```
 
 **Vantagens do Prisma:**
 
@@ -118,7 +118,7 @@ No contexto do projeto de posts, o reducer ajuda a centralizar e controlar toda 
 - **setError:** Define uma mensagem de erro (ou null para limpar erros).
 - **addPost:** Adiciona um novo post à lista.
 - **deletePost:** Remove um post pelo seu id.
-Essas ações são usadas para modificar o estado global gerenciado pelo Redux.
+  Essas ações são usadas para modificar o estado global gerenciado pelo Redux.
 
 **Benefícios**
 
@@ -236,25 +236,26 @@ Siga os passos abaixo para configurar e executar o projeto:
 
 **1. Clone o repositório**
 
-   ```bash
-   git clone https://github.com/andretheodoro/post-app.git
-   cd post-app
-   ```
+```bash
+git clone https://github.com/andretheodoro/post-app.git
+cd post-app
+```
 
 **2. Instale as dependências**
 
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
 **3. Execute o projeto**
 
-  ```bash
-  npm run build
-  ```
-   ```bash
-   npm run dev
-   ```
+```bash
+npm run build
+```
+
+```bash
+npm run dev
+```
 
 **4. Acesse o aplicativo no navegador em http://localhost:5173/**
 
@@ -265,14 +266,16 @@ Observação: Para as funcionalidades desse projetos serem executadas corretamen
 Este projeto está totalmente containerizado utilizando o Docker:
 
 **5.1. Construa uma imagem Docker:**
-  ```bash
-  docker build -t post-app
-  ```
+
+```bash
+docker build -t post-app
+```
 
 **5.2. Executa a aplicação como um contêiner Docker, disponibilizando-a no endereço http://localhost:5173:**
-  ```bash
-  docker run -p 5173:5173 post-app
-   ```
+
+```bash
+docker run -p 5173:5173 post-app
+```
 
 **CI/CD**
 
@@ -281,15 +284,15 @@ O workflow de CI/CD (Continuous Integration/Continuous Deployment) utilizado na 
 Principais Funcionalidades:
 
 - **Integração Contínua (CI):**
-Cada vez que uma nova alteração é enviada para o repositório (por exemplo, por meio de um pull request ou push), o workflow executa automaticamente uma série de verificações e testes.
-Essas verificações incluem a execução de testes unitários com Jest via conexão ao BD e em Mock, e a verificação de que a aplicação pode ser construída sem erros.
+  Cada vez que uma nova alteração é enviada para o repositório (por exemplo, por meio de um pull request ou push), o workflow executa automaticamente uma série de verificações e testes.
+  Essas verificações incluem a execução de testes unitários com Jest via conexão ao BD e em Mock, e a verificação de que a aplicação pode ser construída sem erros.
 
 - **Deployment Automatizado (CD):**
-Após a execução bem-sucedida dos testes, o workflow utiliza Docker para criar uma imagem da aplicação e fazer o push para o Docker Hub, utilizando as credenciais (DOCKER_USERNAME e DOCKER_PASSWORD).
-Em ambientes de produção, o workflow pode automatizar o deployment da imagem Docker para servidores ou serviços de nuvem, utilizando a imagem construída durante o processo de integração.
+  Após a execução bem-sucedida dos testes, o workflow utiliza Docker para criar uma imagem da aplicação e fazer o push para o Docker Hub, utilizando as credenciais (DOCKER_USERNAME e DOCKER_PASSWORD).
+  Em ambientes de produção, o workflow pode automatizar o deployment da imagem Docker para servidores ou serviços de nuvem, utilizando a imagem construída durante o processo de integração.
 
 **Benefícios:**
-  
+
 - **Automação:** Elimina a necessidade de processos manuais para testar e implantar a aplicação.
 - **Confiabilidade:** Garante que cada alteração no código seja verificada antes de ser mesclada ou implantada, evitando bugs em produção.
 - **Rapidez:** A automação do ciclo de desenvolvimento permite feedback rápido e maior eficiência na entrega de novas funcionalidades.
@@ -311,11 +314,10 @@ Etapas de execução das "Actions" configuradas e executadas com sucesso:
 ![image](https://github.com/user-attachments/assets/29ba8c22-cfd0-4d86-9af1-8cfc85129243)
 ![image](https://github.com/user-attachments/assets/7a09c578-ad9f-40f8-8c7b-437589b30aaf)
 
-
-
 ## Guia de Uso da Aplicação
 
 **1. Login**
+
 - Acesse a página de login.
 
 ![image](https://github.com/user-attachments/assets/9c8b3928-1a6e-43b5-9677-f90b2257a57f)
@@ -327,7 +329,7 @@ Etapas de execução das "Actions" configuradas e executadas com sucesso:
 **1.1. Professor:**
 
 - Lista de Posts correspondente somente ao professor logado:
-  
+
 ![image](https://github.com/user-attachments/assets/7a306bd2-0f36-45ef-933d-060612f076c3)
 
 - Em caso de usuário e/ou senha inválidas, sistema exibirá mensagem de validação e não permitirá o login:
@@ -337,7 +339,7 @@ Etapas de execução das "Actions" configuradas e executadas com sucesso:
 **1.2. Aluno:**
 
 - Lista de Posts gerais (todos professores):
-  
+
 ![image](https://github.com/user-attachments/assets/5efeebc3-8224-4aa7-b4df-930e2caa8962)
 
 **2. Gerenciamento de Posts**
@@ -415,7 +417,6 @@ Através da utilização de Styled-Components e outras técnicas foi desenvolvid
 ![image](https://github.com/user-attachments/assets/fcc3918e-f61d-4e7c-95eb-d5515067bca7)
 ![image](https://github.com/user-attachments/assets/ad072c2e-7bf6-4174-b6bd-734a863a809a)
 
-
 ## Desafios Enfrentados pela Equipe Durante o Desenvolvimento
 
 O desenvolvimento deste projeto apresentou diversos desafios técnicos e organizacionais. Abaixo, destacamos os principais obstáculos enfrentados e como a equipe lidou com eles:
@@ -440,3 +441,5 @@ A fim de aprimorar e evoluir o produto, elencamos algumas futuras melhorias que 
 - Ajustar identificação de notas para não permitir "colisão".
 - Permitir comentários gerais nos posts.
 - Permitir editar/excluir uma nota.
+
+## V1
